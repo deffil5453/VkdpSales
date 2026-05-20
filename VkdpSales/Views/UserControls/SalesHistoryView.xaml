@@ -24,8 +24,15 @@
                 </StackPanel>
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="Клиент:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox ItemsSource="{Binding Clients}" DisplayMemberPath="Name" 
-                          SelectedItem="{Binding SelectedClient}" Width="180" Height="35"/>
+                    <ComboBox ItemsSource="{Binding Clients}" 
+                          SelectedItem="{Binding SelectedClient}" Width="180" Height="35">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="Статус:" FontWeight="SemiBold" Margin="0,0,0,5"/>

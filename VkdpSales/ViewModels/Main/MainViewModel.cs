@@ -45,7 +45,11 @@ namespace VkdpSales.ViewModels.Main
         public bool IsAdmin { get; private set; }
         public bool IsManager { get; private set; }
         public bool IsAnalyst { get; private set; }
-
+        public bool CanManageSales => IsAdmin || IsManager;      // Новая продажа, История продаж
+        public bool CanManageProducts => IsAdmin || IsManager;   // Товары
+        public bool CanManageClients => IsAdmin || IsManager;    // Клиенты
+        public bool CanViewAnalytics => IsAdmin || IsAnalyst;    // Статистика
+        public bool CanManageUsers => IsAdmin;
         public ICommand NewSaleCommand { get; set; }
         public ICommand SalesHistoryCommand { get; set; }
         public ICommand ProductsCommand { get; set; }
@@ -82,6 +86,11 @@ namespace VkdpSales.ViewModels.Main
             {
                 OnAnalytics(null);
             }
+            OnPropertyChanged(nameof(CanManageSales));
+            OnPropertyChanged(nameof(CanManageProducts));
+            OnPropertyChanged(nameof(CanManageClients));
+            OnPropertyChanged(nameof(CanViewAnalytics));
+            OnPropertyChanged(nameof(CanManageUsers));
         }
 
         private void OnNewSale(object parameter) { CurrentView = new NewSaleViewModel(); }

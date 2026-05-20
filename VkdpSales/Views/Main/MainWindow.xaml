@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:VkdpSales.Views.UserControls"
         xmlns:local="clr-namespace:VkdpSales"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1100">
+        Title="MainWindow" Height="750" Width="1200">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:NewSaleViewModel}">
             <views:NewSaleView/>
@@ -59,41 +59,91 @@
                 <!-- Информация о пользователе -->
                
                 <!-- 🔘 Кнопки меню -->
+                <!-- 🔘 Кнопки меню с управлением видимости по ролям -->
                 <StackPanel Margin="8,0,8,0">
 
-                    <Button Content="🛒 Новая продажа" Command="{Binding NewSaleCommand}" Style="{StaticResource SidebarButton}">
-                       
+                    <!-- 🛒 Новая продажа: Менеджер + Админ -->
+                    <Button Content="🛒 Новая продажа" Command="{Binding NewSaleCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsManager}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
 
-                    <Button Content="📋 История продаж" Command="{Binding SalesHistoryCommand}" Style="{StaticResource SidebarButton}"/>
+                    <!-- 📋 История продаж: Все роли -->
+                    <Button Content="📋 История продаж" Command="{Binding SalesHistoryCommand}" 
+            Style="{StaticResource SidebarButton}"/>
 
-                    <Button Content="📦 Товары" Command="{Binding ProductsCommand}" Style="{StaticResource SidebarButton}">
-                       
+                    <!-- 📦 Товары: Менеджер + Админ -->
+                    <Button Content="📦 Товары" Command="{Binding ProductsCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsManager}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
 
-                    <Button Content="👥 Клиенты" Command="{Binding ClientsCommand}" Style="{StaticResource SidebarButton}">
-                        
+                    <!-- 👥 Клиенты: Менеджер + Админ -->
+                    <Button Content="👥 Клиенты" Command="{Binding ClientsCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsManager}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
 
-                    <Button Content="📊 Статистика" Command="{Binding AnalyticsCommand}" Style="{StaticResource SidebarButton}">
-                        
+                    <!-- 📊 Статистика: Аналитик + Админ -->
+                    <Button Content="📊 Статистика" Command="{Binding AnalyticsCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAnalyst}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
 
-                    <Button Content="👤 Пользователи" Command="{Binding UsersCommand}" Style="{StaticResource SidebarButton}">
-                       
+                    <!-- 👤 Пользователи: Только Админ -->
+                    <Button Content="👤 Пользователи" Command="{Binding UsersCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
+
                 </StackPanel>
 
                 <!-- Разделитель -->
                 <Rectangle Height="1" Fill="#3DD484" Margin="15,10" Opacity="0.5"/>
 
-                <!-- Кнопка выхода -->
+                <!-- Кнопка выхода: всем -->
                 <Button Content="🚪 Выйти" Command="{Binding LogoutCommand}" 
-                        Style="{StaticResource SidebarButton}"
-                        Margin="8,10,8,0"
-                        Background="#E74C3C" Foreground="White">
-                   
-                </Button>
+        Style="{StaticResource SidebarButton}" Margin="8,10,8,0"/>
             </StackPanel>
         </Border>
 

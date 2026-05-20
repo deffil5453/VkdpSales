@@ -57,7 +57,6 @@ namespace VkdpSales.Data
                 .HasForeignKey(o => o.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 3. Заполнение базовыми данными (Seed)
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin", Description = "Полный доступ к системе" },
                 new Role { Id = 2, Name = "Manager", Description = "Оформление продаж, справочники" },
@@ -65,7 +64,6 @@ namespace VkdpSales.Data
             );
 
             modelBuilder.Entity<User>().HasData(
-                // PasswordHash: пока заглушка. Позже заменим на BCrypt хэш "admin123" и "manager123"
                 new User { Id = 1, Login = "admin", Password = "admin123", FullName = "Администратор Системы", RoleId = 1, IsActive = true, CreatedAt = new DateTime(2024, 1, 1) },
                 new User { Id = 2, Login = "manager", Password = "manager123", FullName = "Иванов И.И.", RoleId = 2, IsActive = true, CreatedAt = new DateTime(2024, 2, 10) }
             );

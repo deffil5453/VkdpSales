@@ -63,7 +63,10 @@
                             </Style.Triggers>
                         </Style>
                     </StackPanel.Style>
-                    <Button Content="💾 Сохранить" Command="{Binding SaveCommand}" Width="90" Height="30" Margin="0,0,5,0" Style="{StaticResource GreenButton}"/>
+                    <Button Content="💾 Сохранить" 
+                        Command="{Binding SaveCommand}" 
+                        CommandParameter="{Binding ElementName=PwdBox}"
+                        Width="90" Height="30" Margin="0,0,5,0" Style="{StaticResource GreenButton}"/>  
                     <Button Content="❌ Отмена" Command="{Binding CancelCommand}" Width="90" Height="30" Style="{StaticResource OutlineButton}"/>
                 </StackPanel>
 

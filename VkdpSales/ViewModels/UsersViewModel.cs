@@ -80,16 +80,20 @@ namespace VkdpSales.ViewModels
 
         private void OnAdd(object parameter)
         {
-            _selectedUser = null;
-            Login = "";
-            Password = "";
-            FullName = "";
+            // Сброс полей формы
+            Login = string.Empty;
+            Password = string.Empty;
+            FullName = string.Empty;
             SelectedRole = "Manager";
             IsActive = true;
-            FormTitle = "Добавление пользователя";
-            IsEditMode = false;
-            OnPropertyChanged("SelectedUser");
+
+            // Сбрасываем выбранного пользователя (нет объекта для редактирования)
+            SelectedUser = null;
+            // Переключаемся в режим редактирования/добавления (показываем кнопки Сохранить/Отмена)
+            IsEditMode = true;
+            FormTitle = "Добавление нового пользователя";
         }
+
 
         private void OnEdit(object parameter)
         {
@@ -108,29 +112,29 @@ namespace VkdpSales.ViewModels
 
         private void OnSave(object parameter)
         {
+            string passwordValue = Password;
+            if (parameter is System.Windows.Controls.PasswordBox pwdBox && !string.IsNullOrEmpty(pwdBox.Password))
+            {
+                passwordValue = pwdBox.Password;
+            }
+
             if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(FullName))
             {
                 MessageBox.Show("Заполните логин и ФИО");
                 return;
             }
-            if (IsEditMode == false && string.IsNullOrEmpty(Password))
-            {
-                MessageBox.Show("Введите пароль для нового пользователя");
-                return;
-            }
 
-            if (IsEditMode == false)
+            // Режим добавления (нет выбранного пользователя)
+            if (SelectedUser == null)
             {
-                // Проверка на дубль логина
-                bool exists = false;
-                foreach (var u in _context.Users)
+                if (string.IsNullOrEmpty(passwordValue))
                 {
-                    if (u.Login == Login)
-                    {
-                        exists = true;
-                        break;
-                    }
+                    MessageBox.Show("Введите пароль для нового пользователя");
+                    return;
                 }
+
+                // Проверка уникальности логина
+                bool exists = _context.Users.Any(u => u.Login == Login);
                 if (exists)
                 {
                     MessageBox.Show("Пользователь с таким логином уже существует");
@@ -140,7 +144,7 @@ namespace VkdpSales.ViewModels
                 var newUser = new User
                 {
                     Login = Login,
-                    Password = Password, // TODO: Добавить хэширование при сдаче
+                    Password = passwordValue,
                     FullName = FullName,
                     RoleId = GetRoleIdByName(SelectedRole),
                     IsActive = IsActive,
@@ -148,22 +152,21 @@ namespace VkdpSales.ViewModels
                 };
                 _context.Users.Add(newUser);
             }
-            else
+            else // Режим редактирования
             {
-                _selectedUser.Login = Login;
-                _selectedUser.FullName = FullName;
-                _selectedUser.RoleId = GetRoleIdByName(SelectedRole);
-                _selectedUser.IsActive = IsActive;
-                // Пароль не меняем, если поле пустое
-                if (!string.IsNullOrEmpty(Password))
+                SelectedUser.Login = Login;
+                SelectedUser.FullName = FullName;
+                SelectedUser.RoleId = GetRoleIdByName(SelectedRole);
+                SelectedUser.IsActive = IsActive;
+                if (!string.IsNullOrEmpty(passwordValue))
                 {
-                    _selectedUser.Password = Password;
+                    SelectedUser.Password = passwordValue;
                 }
             }
 
             _context.SaveChanges();
-            OnLoad(null);
-            OnCancel(null);
+            OnLoad(null);                // обновить таблицу
+            OnCancel(null);              // очистить форму и выйти из режима
             MessageBox.Show("Пользователь сохранён");
         }
 
@@ -198,12 +201,14 @@ namespace VkdpSales.ViewModels
 
         private void OnCancel(object parameter)
         {
-            _selectedUser = null;
-            Password = "";
-            FormTitle = "Управление пользователями";
+            SelectedUser = null;
+            Login = string.Empty;
+            Password = string.Empty;
+            FullName = string.Empty;
+            SelectedRole = "Manager";
+            IsActive = true;
             IsEditMode = false;
-            OnPropertyChanged("SelectedUser");
-            OnPropertyChanged("FormTitle");
+            FormTitle = "Управление пользователями";
         }
 
         private int GetRoleIdByName(string roleName)

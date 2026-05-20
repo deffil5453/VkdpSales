@@ -87,8 +87,15 @@ namespace VkdpSales.ViewModels
             Stock = 0;
             IsActive = true;
             FormTitle = "Добавление товара";
-            IsEditMode = false;
+
+            // ✅ ИЗМЕНЕНО: true вместо false
+            // Это покажет кнопки "Сохранить" и "Отмена"
+            IsEditMode = true;
+
+            // ✅ Уведомляем об изменении свойств
             OnPropertyChanged("SelectedProduct");
+            OnPropertyChanged("IsEditMode");
+            OnPropertyChanged("FormTitle");
         }
 
         private void OnEdit(object parameter)
@@ -117,7 +124,8 @@ namespace VkdpSales.ViewModels
                 return;
             }
 
-            if (_isEditMode == false)
+            // ✅ ПРОВЕРКА: если _selectedProduct == null → добавляем новый товар
+            if (_selectedProduct == null)
             {
                 // Проверка на дубль артикула
                 bool exists = false;
@@ -149,6 +157,7 @@ namespace VkdpSales.ViewModels
             }
             else
             {
+                // ✅ Редактирование существующего товара
                 _selectedProduct.SKU = SKU;
                 _selectedProduct.Name = Name;
                 _selectedProduct.CategoryId = CategoryId;

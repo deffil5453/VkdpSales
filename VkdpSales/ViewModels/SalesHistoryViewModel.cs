@@ -47,7 +47,7 @@ namespace VkdpSales.ViewModels
             _filteredOrders = new ObservableCollection<SaleOrder>();
             _allOrders = new ObservableCollection<SaleOrder>();
 
-            Statuses = new ObservableCollection<string> { "Все", "New", "Paid", "Shipped", "Completed", "Cancelled" };
+            Statuses = new ObservableCollection<string> { "Все", "Новые", "Оплачено", "Отправленный", "Завершен", "Отменен" };
             _selectedStatus = "Все";
 
             LoadData();
