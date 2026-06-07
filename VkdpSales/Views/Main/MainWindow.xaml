@@ -7,13 +7,16 @@
         xmlns:views="clr-namespace:VkdpSales.Views.UserControls"
         xmlns:local="clr-namespace:VkdpSales"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="1200">
+        Title="ООО «ВКДП» — Система учёта продаж" Height="750" Width="1200">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:NewSaleViewModel}">
             <views:NewSaleView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SalesHistoryViewModel}">
             <views:SalesHistoryView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:ClientsViewModel}">
             <views:ClientsView/>
@@ -61,7 +64,7 @@
                 <!-- 🔘 Кнопки меню -->
                 <!-- 🔘 Кнопки меню с управлением видимости по ролям -->
                 <StackPanel Margin="8,0,8,0">
-
+                    <Button Content="📊 Дашборд" Command="{Binding DashboardCommand}" Style="{StaticResource SidebarButton}"/>
                     <!-- 🛒 Новая продажа: Менеджер + Админ -->
                     <Button Content="🛒 Новая продажа" Command="{Binding NewSaleCommand}">
                         <Button.Style>

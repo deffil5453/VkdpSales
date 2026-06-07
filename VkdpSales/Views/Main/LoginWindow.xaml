@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VkdpSales.Views.Main"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="400">
+        Title="Авторизация" Height="450" Width="400">
     <Grid>
         <!-- Декоративные элементы фона -->
         <Ellipse Width="400" Height="400" Fill="#2ECC71" Opacity="0.05" 

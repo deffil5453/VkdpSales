@@ -57,7 +57,7 @@ namespace VkdpSales.ViewModels.Main
         public ICommand AnalyticsCommand { get; set; }
         public ICommand UsersCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
-
+        public ICommand DashboardCommand { get; set; }
         public MainViewModel(User loggedInUser)
         {
             currentUser = loggedInUser;
@@ -76,7 +76,8 @@ namespace VkdpSales.ViewModels.Main
             AnalyticsCommand = new VKDPCommand(OnAnalytics);
             UsersCommand = new VKDPCommand(OnUsers);
             LogoutCommand = new VKDPCommand(OnLogout);
-
+            DashboardCommand = new VKDPCommand(OnDashboard);
+            OnDashboard(null);
             // ✅ По умолчанию: менеджер → Новая продажа, аналитик → Аналитика
             if (IsManager)
             {
@@ -92,7 +93,10 @@ namespace VkdpSales.ViewModels.Main
             OnPropertyChanged(nameof(CanViewAnalytics));
             OnPropertyChanged(nameof(CanManageUsers));
         }
-
+        private void OnDashboard(object parameter)
+        {
+            CurrentView = new DashboardViewModel();
+        }
         private void OnNewSale(object parameter) { CurrentView = new NewSaleViewModel(); }
         private void OnSalesHistory(object parameter) { CurrentView = new SalesHistoryViewModel(); }
         private void OnProducts(object parameter) { CurrentView = new ProductsViewModel(); }

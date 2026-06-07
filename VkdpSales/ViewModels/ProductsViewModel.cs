@@ -40,7 +40,20 @@ namespace VkdpSales.ViewModels
         public bool IsActive { get => _isActive; set { _isActive = value; OnPropertyChanged("IsActive"); } }
         public string FormTitle { get => _formTitle; set { _formTitle = value; OnPropertyChanged("FormTitle"); } }
         public bool IsEditMode { get => _isEditMode; set { _isEditMode = value; OnPropertyChanged("IsEditMode"); } }
+        // Фильтр по категориям
+        private ObservableCollection<Category> _categories;
+        public ObservableCollection<Category> Categories
+        {
+            get => _categories;
+            set { _categories = value; OnPropertyChanged("Categories"); }
+        }
 
+        private Category _selectedCategory;
+        public Category SelectedCategory
+        {
+            get => _selectedCategory;
+            set { _selectedCategory = value; OnPropertyChanged("SelectedCategory"); ApplyCategoryFilter(); }
+        }
         public ICommand LoadCommand { get; set; }
         public ICommand AddCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -63,10 +76,30 @@ namespace VkdpSales.ViewModels
             SaveCommand = new VKDPCommand(OnSave);
             DeleteCommand = new VKDPCommand(OnDelete);
             CancelCommand = new VKDPCommand(OnCancel);
-
+            // Загружаем категории для фильтра
+            _categories = new ObservableCollection<Category>();
+            _categories.Add(new Category { Id = 0, Name = "Все категории" }); // Пункт "Все"
+            foreach (var c in _context.Categories)
+            {
+                _categories.Add(c);
+            }
+            SelectedCategory = _categories[0]; // По умолчанию "Все"
             OnLoad(null);
         }
-
+        private void ApplyCategoryFilter()
+        {
+            var filtered = new ObservableCollection<Product>();
+            foreach (var p in _context.Products)
+            {
+                // Показываем, если выбрано "Все" (Id=0) или категория совпадает
+                if (SelectedCategory == null || SelectedCategory.Id == 0 || p.CategoryId == SelectedCategory.Id)
+                {
+                    filtered.Add(p);
+                }
+            }
+            Products = filtered;
+            OnPropertyChanged("Products");
+        }
         private void OnLoad(object parameter)
         {
             _products.Clear();
@@ -74,6 +107,8 @@ namespace VkdpSales.ViewModels
             {
                 _products.Add(p);
             }
+            // Применяем текущий фильтр после загрузки
+            ApplyCategoryFilter();
         }
 
         private void OnAdd(object parameter)

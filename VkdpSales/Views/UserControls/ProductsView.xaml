@@ -7,14 +7,35 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="800">
     <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Фильтр -->
+            <RowDefinition Height="*"/>
+            <!-- Таблица (занимает всё место) -->
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Таблица товаров -->
-        <DataGrid Grid.Column="0" ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}"
+        <!-- 🔹 Фильтр по категориям -->
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+            <TextBlock Text="Категория:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="SemiBold"/>
+            <ComboBox ItemsSource="{Binding Categories}" 
+              SelectedItem="{Binding SelectedCategory}" 
+              Width="200" Height="30">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- 🔹 Таблица товаров (Теперь в Ячейке: Колонка 0, Строка 1) -->
+        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}"
               AutoGenerateColumns="False" IsReadOnly="True" AlternatingRowBackground="#F5F5F5" 
               GridLinesVisibility="Horizontal" CanUserAddRows="False">
             <DataGrid.Columns>
@@ -27,8 +48,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Форма редактирования/добавления -->
-        <Border Grid.Column="2" Background="#F8F9FA" Padding="15" CornerRadius="5">
+        <!-- Форма редактирования/добавления (Остается во 2-й колонке, растягивается на 2 строки) -->
+        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Background="#F8F9FA" Padding="15" CornerRadius="5">
             <StackPanel>
                 <TextBlock Text="{Binding FormTitle}" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" Foreground="#2C3E50"/>
 
@@ -37,7 +58,6 @@
 
                 <TextBlock Text="Название:" Margin="0,0,0,5"/>
                 <TextBox Text="{Binding Name}" Height="35" Margin="0,0,0,10"/>
-
 
                 <TextBlock Text="Ед. измерения:" Margin="0,0,0,5"/>
                 <TextBox Text="{Binding Unit}" Height="35" Margin="0,0,0,10"/>
@@ -58,10 +78,8 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
-                            <!-- По умолчанию скрыто -->
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <!-- Показываем, если IsEditMode = true -->
                                 <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
@@ -74,10 +92,10 @@
                 </StackPanel>
 
                 <Button Content="Удалить" 
-        Command="{Binding DeleteCommand}" 
-        Width="100" Height="30" 
-        Background="#C0392B" Foreground="White" 
-        Margin="0,10,0,0" Cursor="Hand"/>
+                        Command="{Binding DeleteCommand}" 
+                        Width="100" Height="30" 
+                        Background="#C0392B" Foreground="White" 
+                        Margin="0,10,0,0" Cursor="Hand"/>
             </StackPanel>
         </Border>
     </Grid>
